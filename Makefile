@@ -2,6 +2,10 @@
 CXX = g++
 CXXFLAGS = -O3 -std=c++17 -Iincludes
 
+# Caminho de compilação (path atual)
+COMPILE_DIR := $(shell pwd)
+CXXFLAGS += -DCOMPILE_DIR="\"$(COMPILE_DIR)\""
+
 # Executável final
 NAME = matrix
 
@@ -35,4 +39,3 @@ run: $(NAME)
 
 clean:
 	rm -rf $(OBJ_DIR) $(NAME)
-

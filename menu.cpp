@@ -386,12 +386,16 @@ void MatrixMenu::draw(void){
     float squareSize =loadingBarHeight / 3.5f;
     DrawRectangleWithBorder(icon, thickness, std::pair(BACKGROUND, WHITE), std::pair(0, 0));
     drawPaletteColor(baseFrame, icon, this->seletedPalette, false);
-    Rectangle icon2 = {baseFrame.x + 1.5F * loadingBarHeight, (h - baseFrame.height) / 4.0f - loadingBarHeight / 2.0f , (float)loadingBarHeight, (float)loadingBarHeight};
-
-    DrawRectangleWithBorder(icon2, thickness, std::pair(BACKGROUND, WHITE), std::pair(0, 0));
-    std::string prop = std::to_string((int)this->dimensions.at(this->selectedDimension).x) + " x " + std::to_string((int)this->dimensions.at(this->selectedDimension).y);
+    std::string t = ".eps";
     int fontSizeProp = loadingBarHeight / 2.5f;
-    int propW = MeasureText(prop.c_str(), fontSizeProp);
+
+    Rectangle icon2 = {baseFrame.x + 1.5F * loadingBarHeight, (h - baseFrame.height) / 4.0f - loadingBarHeight / 2.0f , (float)loadingBarHeight, (float)loadingBarHeight};
+    DrawRectangleWithBorder(icon2, thickness, std::pair(BACKGROUND, WHITE), std::pair(0, 0));
+    DrawText(t.c_str(), icon2.x + (icon2.width - MeasureText(t.c_str(), fontSizeProp)) / 2.0f, icon2.y + (icon2.height - fontSizeProp) / 2.0f, fontSizeProp, WHITE);
+
+    
+    std::string prop = std::to_string((int)this->dimensions.at(this->selectedDimension).x) + " x " + std::to_string((int)this->dimensions.at(this->selectedDimension).y);
+        int propW = MeasureText(prop.c_str(), fontSizeProp);
 
     Rectangle icon3 = {baseFrame.x + baseFrame.width, (h - baseFrame.height) / 4.0f - loadingBarHeight / 2.0f , (float)1.2f * propW, (float)loadingBarHeight};
     icon3.x -= icon3.width;
@@ -417,12 +421,10 @@ void MatrixMenu::exportToEps() const{
     try {
         if (!std::filesystem::exists(dirPath)) {
             std::filesystem::create_directory(dirPath);
-            std::cout << "Diretório criado em: " << dirPath << "\n";
-        } else {
-            std::cout << "Diretório já existe em: " << dirPath << "\n";
+            std::cout << "Directory created at: " << dirPath << "\n";
         }
     } catch (const std::exception& e) {
-        std::cerr << "Erro ao criar diretório: " << e.what() << "\n";
+        std::cerr << "Failed attempt on creating directory: " << e.what() << "\n";
     }
     std::vector<int> ints;
     if(selectedFrameCount() == 0) {

@@ -4,10 +4,16 @@
 #include <fstream>
 #include <iostream>
 #include <map>
-static std::filesystem::path CONFIG = std::filesystem::current_path() / "config.json";
+
+const std::filesystem::path COMPILE_PATH;
+
+static std::filesystem::path CONFIG = COMPILE_PATH / "config.json";
 
 std::ifstream createConfigFile() {
-    std::cerr << "Configuracao sendo carregada/criada..." << std::endl;
+    if(COMPILE_PATH == "undefined") {
+        std::cerr << "Cannot open/load config file. Path of compilation undefined.";
+    }
+    std::cerr << "Loading or creating configuration file... " << std::endl;
     if (std::filesystem::exists(CONFIG)) {
         return std::ifstream(CONFIG, std::ios::in);
     }

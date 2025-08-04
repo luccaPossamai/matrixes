@@ -1,4 +1,5 @@
 
+#include <cassert>
 #include <unistd.h>
 #include <filesystem> 
 #include "raylib.h"
@@ -8,9 +9,17 @@
 
 #define RATE 200;
 
+#ifndef COMPILE_DIR
+#define COMPILE_DIR "undefined"
+#endif
 
+const std::filesystem::path COMPILE_PATH = COMPILE_DIR;
 
-std::filesystem::path path = std::filesystem::current_path() / "matrixes";
+std::filesystem::path matrixes(){
+    return COMPILE_PATH / "matrixes";
+
+}
+
 
 static ListMenu* menu = nullptr;
 static MatrixMenu* matrixMenu = nullptr;
@@ -19,10 +28,14 @@ void tryOpenPath(int, char**);
 void readKeys();
 
 int main(int argc, char* argv[]){
+    if(COMPILE_PATH == "undefined"){
+        std::cerr << "Projected compiled without project path defined";
+        return 1;
+    }
     tryOpenPath(argc, argv);  
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(700, 700, "Matrixes");
-    menu = new ListMenu(path);
+    if(std::filesystem::exists(matrixes()) && !matrixMenu)menu = new ListMenu(matrixes());
     float acc = 100;
     while(!WindowShouldClose()){
         
@@ -46,14 +59,14 @@ void tryOpenPath(int argc, char* argv[]){
     caminho_arquivo = std::filesystem::absolute(caminho_arquivo);
 
     if (!std::filesystem::exists(caminho_arquivo)) {
-        std::cerr << "Arquivo não encontrado: " << caminho_arquivo << "\n";
+        std::cerr << "File not founded at: " << caminho_arquivo << "\n";
         return;
     }
 
-    std::cout << "Arquivo recebido: " << caminho_arquivo << "\n";
-    std::cout << "Nome do arquivo: " << caminho_arquivo.filename() << "\n";
-    std::cout << "Extensão: " << caminho_arquivo.extension() << "\n";
-    std::cout << "Diretório pai: " << caminho_arquivo.parent_path() << "\n";
+    std::cout << "Opening: " << caminho_arquivo << "\n";
+    //std::cout << "Nome do arquivo: " << caminho_arquivo.filename() << "\n";
+    //std::cout << "Extensão: " << caminho_arquivo.extension() << "\n";
+    //std::cout << "Diretório pai: " << caminho_arquivo.parent_path() << "\n";
     SetTraceLogLevel(LOG_NONE);
     matrixMenu = new MatrixMenu(caminho_arquivo);
 }
