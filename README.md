@@ -3,6 +3,7 @@ A project all based on making the analysis of matrixes easier. The project make 
 
 ## Exports
 Export snapshots of the matrix as eps file up to a 'very large number'. 
+
 <img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/fad614de-1548-4c1d-b941-b4bc4d99fa29" />
 <img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/62e3b245-9fb8-47be-8478-b9ac6c890c13" />
 
