@@ -86,13 +86,13 @@ sudo mv matrix /usr/local/bin/matrix
 
 Once compiled and installed you can:
 
-## 📁 Access base data 
+# 📁 Access base data 
 List all the data into the `/matrixes` folder of the project
 ```bash
 matrix
 ```
 
-## 📄 Open specific data file
+# 📄 Open specific data file
 ```
 matrix 'filename.dat'
 ```
