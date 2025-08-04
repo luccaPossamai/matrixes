@@ -22,9 +22,35 @@ Create your own colors and map the values to beatify the lattice
 <img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/918e5f3c-965d-4091-80df-1655efe79bd1" />
 <img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/c4581e49-2a91-446b-8826-eb9fa627d662" />
 
+## Requirements
+You'll need g++ compilator and the raylib libraries:
+
+# g++
+```
+sudo apt update
+sudo apt install g++
+```
+
+# raylib
+```
+sudo apt install libraylib-dev
+```
+
+# base libraries
+```
+sudo apt install libgl1-mesa-dev libx11-dev libxi-dev libxrandr-dev libxcursor-dev libxinerama-dev libxxf86vm-dev
+```
+
+# make 
+```
+sudo apt install make
+```
+
+
+
 # Instalation
 First you have to dowload the project and compile
-Linux:
+
 ```
 git clone https://github.com/luccaPossamai/matrixes.git
 cd matrixes
