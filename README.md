@@ -67,3 +67,33 @@ sudo apt install libgl1-mesa-dev libx11-dev libxi-dev libxrandr-dev \
 ```bash
 sudo apt install make
 ```
+
+## ⚙️ Installation
+
+Clone the repository and compile the project:
+```bash
+git clone https://github.com/luccaPossamai/matrixes.git
+cd matrixes
+make
+```
+
+(Optional) Move the binary to a global path:
+```bash
+sudo mv matrix /usr/local/bin/matrix
+```
+
+### 🚀 Usage
+
+Once compiled and installed you can:
+
+## 📁 Access base data 
+List all the data into the '/matrixes' folder of the project
+```bash
+matrix
+```
+
+## 🖺Open specific data file
+```
+matrix 'filename.dat'
+```
+
