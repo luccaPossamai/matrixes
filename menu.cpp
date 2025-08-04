@@ -220,7 +220,7 @@ void drawPaletteColor(Rectangle frame, Rectangle paletteHeader,
         int palette, bool sel){
     float thickness = frame.width / 250;
     float selThickness = 2 * thickness;
-
+    
     std::map<int, Color> map =  {
                                         {-1, GenerateColorFromIndex(-1)},
                                         {1, GenerateColorFromIndex(1)},
@@ -253,13 +253,13 @@ void drawPalettesPopup(const MatrixMenu& menu, Rectangle frame){
         float selThickness = 2 * thickness;
 
     
-    int countMax = CONFIG.colors.size();
-    float paletteIconSize = (float)1.1f * frame.width / 21.0f;
-    
-    Vector2 boxSize = {paletteIconSize * 21, 1.2f * paletteIconSize * (float)( 2.0f + 1.5f * floor(countMax / 10))};
+     int countMax = 10;
+    float paletteIconSize = (float)1.1f * frame.width / (1.0f + 2.f * countMax);
+    int size = CONFIG.colors.size(); 
+    Vector2 boxSize = {paletteIconSize * 21, 1.2f * paletteIconSize * (float)( 2.0f + 1.5f * floor(size / countMax ))};
     Rectangle box = {frame.x + (frame.width - boxSize.x) / 2.0f, frame.y, boxSize.x, boxSize.y};
     DrawRectangleWithBorder(box,thickness, std::pair(BACKGROUND, WHITE), std::pair(0, 0));
-    for(int i = 0; i < countMax; i++){
+    for(int i = 0; i < size+ 1; i++){
         int x = i % countMax, y = i / countMax;
         float dy = (frame.height - paletteIconSize) / 9.0f; 
         Rectangle palette = {
@@ -284,8 +284,8 @@ void drawPalettesPopup(const MatrixMenu& menu, Rectangle frame){
         DrawText(std::to_string(i).c_str(), 1 + paletteHeader.x + (paletteHeader.width - textSize)/ 2.0f, paletteHeader.y - dySel - thickness, 4, nColor);
         DrawText(std::to_string(i).c_str(), -1 + paletteHeader.x + (paletteHeader.width - textSize)/ 2.0f, paletteHeader.y - dySel - thickness, 4, nColor);
         
-
-        if(i >= CONFIG.colors.size()) continue;
+        if(i - 1>= (int)CONFIG.colors.size()) continue;
+        
         drawPaletteColor(frame, {paletteHeader.x, paletteHeader.y + paletteHeader.height + (sel ? selThickness : thickness), paletteIconSize, paletteIconSize}, i, sel);
         if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
             if(CheckCollisionPointRec(GetMousePosition(), palette)) menu.seletedPalette = i;
@@ -448,6 +448,7 @@ void MatrixMenu::exportToEps() const{
     if(std::filesystem::exists(epsPath)){
         std::cerr << "The eps file already exists at path " << epsPath.relative_path() << "\n";
     } 
+    printf("\n%d\n", this->seletedPalette);
 
     if (!out.is_open()) {
         std::cerr << "Failed creating eps file at " << epsPath.relative_path() << "\n";
@@ -469,10 +470,11 @@ void MatrixMenu::exportToEps() const{
         return;
 
     }
+    
     for(int i = 0; i < frame.values.size(); i++){
         int x = i % (int)res.x, y = res.y - 1- (int)(i / res.x);
         Color color = GenerateColorFromIndex(frame.values.at(i));
-        if(this->seletedPalette > 0) CONFIG.getColor(this->seletedPalette - 1, frame.values.at(i));
+        if(this->seletedPalette > 0) color = CONFIG.getColor(this->seletedPalette - 1, frame.values.at(i));
         out << color.r / 255.0f << " " << color.g / 255.0f<< " " << color.b / 255.0f<< " setrgbcolor\n";
         out << "newpath\n";
         out << x * unitSize << " " << y * unitSize<< " moveto\n";
