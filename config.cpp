@@ -1,3 +1,5 @@
+#include "paths.h"
+
 #include "config.h"
 #include <exception>
 #include <filesystem>
@@ -5,22 +7,25 @@
 #include <iostream>
 #include <map>
 
-const std::filesystem::path COMPILE_PATH;
 
-static std::filesystem::path CONFIG = COMPILE_PATH / "config.json";
+
+
+std::filesystem::path config() {
+    return COMPILE_PATH / "config.json";
+}
 
 std::ifstream createConfigFile() {
     if(COMPILE_PATH == "undefined") {
-        std::cerr << "Cannot open/load config file. Path of compilation undefined.";
+        std::cerr << "Cannot open/load config file. Path of compilation undefined." << std::endl;
     }
-    std::cerr << "Loading or creating configuration file... " << std::endl;
-    if (std::filesystem::exists(CONFIG)) {
-        return std::ifstream(CONFIG, std::ios::in);
+    std::cerr << "Loading or creating configuration file... " << config() << std::endl;
+    if (std::filesystem::exists(config())) {
+        return std::ifstream(config(), std::ios::in);
     }
 
     // Cria e escreve arquivo padrão
     {
-        std::ofstream out(CONFIG, std::ios::out | std::ios::trunc);
+        std::ofstream out(config(), std::ios::out | std::ios::trunc);
         if (!out.is_open()) {
             throw std::runtime_error("Erro ao criar arquivo de configuração");
         }
@@ -38,7 +43,7 @@ std::ifstream createConfigFile() {
     }
 
     // Agora abre para leitura
-    std::ifstream in(CONFIG, std::ios::in);
+    std::ifstream in(config(), std::ios::in);
     if (!in.is_open()) {
         throw std::runtime_error("Erro ao abrir arquivo de configuração para leitura");
     }

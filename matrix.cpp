@@ -1,3 +1,4 @@
+#include "paths.h"
 
 #include <cassert>
 #include <unistd.h>
@@ -29,9 +30,11 @@ void readKeys();
 
 int main(int argc, char* argv[]){
     if(COMPILE_PATH == "undefined"){
-        std::cerr << "Projected compiled without project path defined";
+        std::cerr << "Projected compiled without project path defined" << std::endl;
         return 1;
     }
+    std::cerr << "Workin on base data of " << COMPILE_PATH;
+
     tryOpenPath(argc, argv);  
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(700, 700, "Matrixes");
