@@ -34,7 +34,7 @@ int main(int argc, char* argv[]){
         return 1;
     }
     std::cerr << "Workin on base data of " << COMPILE_PATH;
-
+    SetTraceLogLevel(LOG_NONE);
     tryOpenPath(argc, argv);  
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(700, 700, "Matrixes");
@@ -55,7 +55,7 @@ int main(int argc, char* argv[]){
 }
 void tryOpenPath(int argc, char* argv[]){
     if( argc < 2 ){
-        std::cerr << "Uso: " << argv[0] << " <arquivo>\n";
+        std::cerr << "Use: " << argv[0] << " <file>\n";
         return;
     }
     std::filesystem::path caminho_arquivo = argv[1];

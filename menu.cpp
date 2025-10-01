@@ -15,7 +15,7 @@
 #include <fstream>
 #include <utility>
 
-Config CONFIG = Config();
+Config CONFIG;
 const  Color BACKGROUND = {15,15,15, 255};
 const std::filesystem::path eps = std::filesystem::current_path() / "exports";
 
@@ -439,17 +439,11 @@ void MatrixMenu::exportToEps() const{
         }  
     }
     for(int frameIndex : ints){
-        std::filesystem::path epsPath = this->path.filename();
-        epsPath.replace_filename(epsPath.stem().string() + "_frame_" + std::to_string(frameIndex));
-        epsPath.replace_extension(".eps");
-        epsPath = dirPath / epsPath;
+        std::filesystem::path epsPath = dirPath / (this->path.stem().string() + "_frame_" + std::to_string(frameIndex) + ".eps");
+        if(std::filesystem::exists(epsPath)){
+            std::cerr << "Overriding already existent eps file at path " << epsPath << "\n";
+        }
         std::ofstream out(epsPath);
-
-    if(std::filesystem::exists(epsPath)){
-        std::cerr << "The eps file already exists at path " << epsPath.relative_path() << "\n";
-    } 
-    printf("\n%d\n", this->seletedPalette);
-
     if (!out.is_open()) {
         std::cerr << "Failed creating eps file at " << epsPath.relative_path() << "\n";
         return;
@@ -463,25 +457,32 @@ void MatrixMenu::exportToEps() const{
 
     int sizeX = CONFIG.getWidth();
     out << "%!PS-Adobe-3.0 EPSF-3.0\n";
-    out << "%%BoundingBox: 0 0 " << sizeX << " " << (int)(sizeX / f) << "\n";
+    
     int unitSize = (float)sizeX / res.x;
     if(unitSize <= 1){
-        std::cerr << "Failed creating eps file, dimension bigger than pixel size.";
-        return;
-
+        std::cerr << "Failed creating eps file, dimension bigger than pixel size." << "\n";
+        unitSize = 1;
+        
     }
+    unitSize ++;
+    out << "%%BoundingBox: 0 0 " << unitSize * res.x << " " << unitSize * res.y << "\n";
     
+    out << "0 setlinewidth\n";
+    out << "1 setlinejoin\n";
+    out << "1 setlinecap\n";
+
     for(int i = 0; i < frame.values.size(); i++){
         int x = i % (int)res.x, y = res.y - 1- (int)(i / res.x);
         Color color = GenerateColorFromIndex(frame.values.at(i));
         if(this->seletedPalette > 0) color = CONFIG.getColor(this->seletedPalette - 1, frame.values.at(i));
         out << color.r / 255.0f << " " << color.g / 255.0f<< " " << color.b / 255.0f<< " setrgbcolor\n";
-        out << "newpath\n";
-        out << x * unitSize << " " << y * unitSize<< " moveto\n";
-        out << unitSize << " 0 rlineto\n";
-        out << "0 " << unitSize << " rlineto\n";
-        out << -unitSize << " 0 rlineto\n";
-        out << "closepath fill\n";
+        out << x * unitSize << " " << y * unitSize << " " << unitSize * 1.1 << " " << unitSize * 1.1 << " rectfill\n";
+        //out << "newpath\n";
+        //out << x * unitSize << " " << y * unitSize<< " moveto\n";
+        //out << unitSize << " 0 rlineto\n";
+        //out << "0 " << unitSize << " rlineto\n";
+        //out << -unitSize << " 0 rlineto\n";
+        //out << "closepath fill\n";
         
     }
     out << "showpage\n";
