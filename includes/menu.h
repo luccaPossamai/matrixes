@@ -6,7 +6,6 @@
 #include <vector>
 #include "raylib.h"
 #include "config.h"
-extern const Color BACKGROUND;
 extern Config CONFIG;
 class MatrixMenu;
 
@@ -36,7 +35,7 @@ class MatrixMenu {
         const std::filesystem::path path;
         mutable Config config = Config();
                 
-        mutable int selectedDimension = 0, selectedFrame = 0, seletedPalette = 0, openedTab = 0;
+        mutable int selectedDimension = 0, selectedFrame = 0, selectedPalette = 0, openedTab = 0;
 
         int nSize;
         MatrixMenu(const std::filesystem::path&);
